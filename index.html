@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <title>Formulaire Multi-Section</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+        }
+
+        .form-container {
+            width: 50%;
+            margin-top: 10px;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .section-content {
+            background-color: #ffffff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .navigation-buttons .left-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .navigation-buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #A31E21; /* Texte rouge */
+    background-color: white; /* Fond blanc */
+    border: 1px solid #A31E21; /* Bordure rouge */
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-bottom: 50px;
+}
+
+        .navigation-buttons button:hover {
+            background-color: #A31E21; /* Fond rouge au survol */
+            color: white; /* Texte blanc au survol */
+        }
+
+        .navigation-buttons button:active {
+            background-color: #A31E21; /* Fond rouge au clic */
+            color: white; /* Texte blanc au clic */
+        }
+
+        /* Bouton Envoyer */
+        .navigation-buttons button:nth-child(2):not(:first-child) {
+            color: white; /* Texte blanc */
+            background-color: #A31E21; /* Fond rouge */
+            border: 1px solid #A31E21; /* Bordure rouge */
+        }
+
+        .navigation-buttons button:nth-child(2):not(:first-child):hover {
+            background-color: white; /* Fond blanc au survol */
+            color: #A31E21; /* Texte rouge au survol */
+        }
+
+        .navigation-buttons button:nth-child(2):not(:first-child):active {
+            background-color: #A31E21; /* Fond rouge au clic */
+            color: white; /* Texte blanc au clic */
+        }
+
+        /* Styles du bouton "Effacer" */
+        #clear-btn {
+            margin-bottom: 50px;
+            color: #A31E21;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #clear-btn:hover {
+            background-color: #aaaaaa; /* Un gris plus sombre que #f5f5f5 */
+        }
+
+        #clear-btn:active {
+            background-color: #A31E21; /* Fond qui devient la couleur du texte */
+            color: white; /* Le texte devient blanc pour le contraste */
+        }
+
+        .error-message {
+            margin-top: 5px;
+            font-size: 12px;
+            color: red;
+        }
+
+        #confirmation-modal button:hover {
+            opacity: 0.8;
+        }
+
+        
+
+        
+
+        
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <!-- Sections -->
+        <div id="section-1" class="form-section active" >
+
+
+            <div class="section-content" style=" height: 22vh; overflow: hidden;">
+                <img src="https://www.empsi-consulting.com/medias/empsi-consulting-icon-rouge-text-noir.png" alt="" style="width: 100%; height: 100%; object-fit: cover; object-position: 0px -75px;">
+            </div>
+            
+            <div class="section-content" style="height: 30vh; background: linear-gradient(to bottom, #A31E21 5%, #f8f8f8 5%);">
+                <!-- Contenu principal -->
+                <div class="content" style="padding: 20px 10px 10px 10px;">
+                    <h2>Formulaire d'inscription à une formation</h2>
+                    <p>Bienvenue sur notre plateforme d'inscription. Pour commencer à bénéficier de nos services de conseil spécialisés, veuillez remplir ce formulaire.</p>
+                    
+                    <!-- Trait de séparation -->
+                    <hr style="border: 1px solid #ccc; margin: 20px 0;">
+                    
+                    <!-- Information en bas -->
+                    <p style="color: red;">* Indique une question obligatoire</p>
+                </div>
+            </div>
+
+            <div class="section-content" style="height: 10vh; display: flex; justify-content: center; align-items: center;">
+                <h3 style="font-weight: bold;">Informations sur l'employé</h3>
+            </div>
+
+            <div class="section-content" style="padding: 20px;">
+                <!-- Texte avec * rouge -->
+                <p style="margin-bottom: 50px;"><label for="identity" style="font-weight: bold; margin-bottom: 20px;">Nom & Prénoms<span style="color: red;">*</span></label></p>
+                
+                <!-- Champ de saisie avec texte par défaut -->
+                <p><input type="text" id="identity" name="identity" placeholder="Votre réponse" 
+                       style="border: none; border-bottom: 1px solid #ccc; outline: none; width: 60%; padding: 5px 0; font-size: 16px;" required></p>
+            </div>
+            
+            <div class="section-content" style="padding: 20px;">
+                <!-- Question 2 : Email -->
+                <p style="margin-bottom: 50px;">
+                    <label for="email" style="font-weight: bold; margin-bottom: 20px;">
+                        Adresse email professionnel <span style="color: red;">*</span>
+                    </label>
+                </p>
+                <p>
+                    <input type="email"  id="email" name="email" placeholder="Votre email" 
+                           style="border: none; border-bottom: 1px solid #ccc; outline: none; width: 60%; padding: 5px 0; font-size: 16px;">
+                </p>
+            </div>
+
+            <div class="section-content" style="padding: 20px;">
+                <!-- Question 1 : Numéro de téléphone -->
+                <p style="margin-bottom: 50px;">
+                    <label for="phone" style="font-weight: bold; margin-bottom: 20px;">
+                        Numéro de téléphone <span style="color: red;">*</span>
+                    </label>
+                </p>
+                <p>
+                    <input type="tel" id="phone" name="phone" placeholder="Votre numéro de téléphone" 
+                           style="border: none; border-bottom: 1px solid #ccc; outline: none; width: 60%; padding: 5px 0; font-size: 16px;">
+                </p>
+            </div>
+            
+            <div class="section-content" style="padding: 20px;">
+                <!-- Question 2 : Poste occupé -->
+                <p style="margin-bottom: 50px;">
+                    <label for="position" style="font-weight: bold; margin-bottom: 20px;">
+                        Poste occupé <span style="color: red;">*</span>
+                    </label>
+                </p>
+                <p>
+                    <input type="text" required id="position" name="position" placeholder="Votre poste" 
+                           style="border: none; border-bottom: 1px solid #ccc; outline: none; width: 60%; padding: 5px 0; font-size: 16px;">
+                </p>
+            </div>
+            
+            <div class="section-content" style="padding: 20px;">
+                <!-- Question 3 : Entreprise -->
+                <p style="margin-bottom: 50px;">
+                    <label for="company" style="font-weight: bold; margin-bottom: 20px;">
+                        Entreprise <span style="color: red;">*</span>
+                    </label>
+                </p>
+                <p>
+                    <input type="text" required id="company" name="company" placeholder="Nom de votre entreprise" 
+                           style="border: none; border-bottom: 1px solid #ccc; outline: none; width: 60%; padding: 5px 0; font-size: 16px;">
+                </p>
+            </div>
+            
+            <div class="section-content" style="padding: 20px;">
+                <!-- Question : Secteur d'activité -->
+                <p style="margin-bottom: 50px;">
+                    <label for="sector" style="font-weight: bold; margin-bottom: 20px;">
+                        Secteur d'activité <span style="color: red;">*</span>
+                    </label>
+                </p>
+                <p>
+                    <select id="sector" required name="sector" 
+                            style="border: 2px solid #ccc; border-radius: 15px; outline: none; width: 47%; padding: 10px; font-size: 16px; background-color: #f4f4f9; color: #333;">
+                        <option value="" disabled selected style="color: #ccc;">Veuillez sélectionner une option</option>
+                        <option value="IT" style="background-color: #f4f4f9;">IT</option>
+                        <option value="Marketing" style="background-color: #f4f4f9;">Marketing</option>
+                        <option value="Finance" style="background-color: #f4f4f9;">Finance</option>
+                        <option value="BTP" style="background-color: #f4f4f9;">BTP</option>
+                        <option value="Ressources Humaines" style="background-color: #f4f4f9;">Ressources Humaines</option>
+                        <option value="Logistique" style="background-color: #f4f4f9;">Logistique</option>
+                        <option value="Santé" style="background-color: #f4f4f9;">Santé</option>
+                        <option value="Éducation" style="background-color: #f4f4f9;">Éducation</option>
+                        <option value="Industrie" style="background-color: #f4f4f9;">Industrie</option>
+                        <option value="Tourisme" style="background-color: #f4f4f9;">Tourisme</option>
+                        <option value="Automobile" style="background-color: #f4f4f9;">Automobile</option>
+                        <option value="Aéronautique" style="background-color: #f4f4f9;">Aéronautique</option>
+                        <option value="Commerce" style="background-color: #f4f4f9;">Commerce</option>
+                        <option value="Agroalimentaire" style="background-color: #f4f4f9;">Agroalimentaire</option>
+                        <option value="Énergie" style="background-color: #f4f4f9;">Énergie</option>
+                        <option value="Construction" style="background-color: #f4f4f9;">Construction</option>
+                        <option value="Transport" style="background-color: #f4f4f9;">Transport</option>
+                        <option value="Publicité" style="background-color: #f4f4f9;">Publicité</option>
+                        <option value="Télécommunications" style="background-color: #f4f4f9;">Télécommunications</option>
+                        <option value="Services Financiers" style="background-color: #f4f4f9;">Services Financiers</option>
+                    </select>
+                </p>
+                <style>
+                    /* Modifier la couleur de fond au survol des options */
+                    #sector option:hover {
+                        background-color: #A31E21;
+                        color: white;
+                    }
+                </style>
+            </div>
+            
+            
+        </div>
+
+
+
+
+        <div id="section-2" class="form-section">
+            <div class="section-content" style=" height: 22vh; overflow: hidden;">
+                <img src="https://www.empsi-consulting.com/medias/empsi-consulting-icon-rouge-text-noir.png" alt="" style="width: 100%; height: 100%; object-fit: cover; object-position: 0px -75px;">
+            </div>
+            
+            <div class="section-content" style="height: 20vh; background: linear-gradient(to bottom, #A31E21 5%, #f8f8f8 5%);">
+                <!-- Contenu principal -->
+                <div class="content" style="padding: 20px 10px 10px 10px;">
+                    <h2>Formulaire d'inscription à une formation</h2>
+                    
+                    <!-- Trait de séparation -->
+                    <hr style="border: 1px solid #ccc; margin: 20px 0;">
+                    
+                    <!-- Information en bas -->
+                    <p style="color: red;">* Indique une question obligatoire</p>
+                </div>
+            </div>
+
+
+            <div class="section-content" style="padding: 20px; background: linear-gradient(to bottom, #A31E21 15%, white 15%);">
+                <!-- Partie haute colorée en rouge avec titre centré -->
+                <div style="height: 20%; background-color: #A31E21; display: flex; justify-content: center; align-items: center;">
+                    <h2 style="color: white; margin: 0;">Choix de la formation</h2>
+                </div>
+            
+                <!-- Question à choix multiple -->
+                <p style="margin-top: 30px; font-weight: bold; background-color: white;">Type de formation<span style="color: red;">*</span></p>
+            
+                <!-- Choix multiples avec boutons radio et cercle -->
+                <form id="type-formation-form" required style="background-color: white;">
+                    <div style="margin-bottom: 20px;">
+                        <input type="radio" required id="webinar" name="type-formation" value="Webinaire" style="display: none;" />
+                        <label for="webinar" style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <span class="radio-circle" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #A31E21; margin-right: 10px;"></span>
+                            Webinaire
+                        </label>
+                    </div>
+            
+                    <div style="margin-bottom: 20px;">
+                        <input type="radio" id="seminar" name="type-formation" value="Séminaire" style="display: none;" />
+                        <label for="seminar" style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <span class="radio-circle" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #A31E21; margin-right: 10px;"></span>
+                            Séminaire
+                        </label>
+                    </div>
+            
+                    <div style="margin-bottom: 20px;">
+                        <input type="radio" id="masterclass" name="type-formation" value="Masterclass" style="display: none;" />
+                        <label for="masterclass" style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <span class="radio-circle" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #A31E21; margin-right: 10px;"></span>
+                            Masterclass
+                        </label>
+                    </div>
+            
+                    <div style="margin-bottom: 20px;">
+                        <input type="radio" id="personalized" name="type-formation" value="Accompagnement personnalisé" style="display: none;" />
+                        <label for="personalized" style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <span class="radio-circle" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #A31E21; margin-right: 10px;"></span>
+                            Accompagnement personnalisé
+                        </label>
+                    </div>
+            
+                    <div style="margin-bottom: 20px; display: flex; align-items: center;">
+                        <input type="radio" id="other" name="type-formation" value="Autre" style="display: none;" />
+                        <label for="other" style="display: inline-flex; align-items: center; cursor: pointer; margin-right: 10px;">
+                            <span class="radio-circle" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #A31E21; margin-right: 10px;"></span>
+                            Autre
+                        </label>
+                        <!-- Zone de saisie si "Autre" est sélectionné -->
+                        <input type="text" id="other-input" name="other_input" placeholder="Précisez"
+                            style="display: none; flex: 1; max-width: 50%; padding: 2px; font-size: 14px; border: none; border-bottom: 1px solid #ccc; outline: none;">
+                    </div>
+                </form>
+            </div>
+            
+            <div class="section-content" style="padding: 20px;">
+                <!-- Question : Thème de la formation -->
+                <p style="margin-bottom: 30px; font-weight: bold;">
+                    Thème de la formation <span style="color: red;">*</span>
+                </p>
+            
+                <!-- Choix multiples -->
+                <form id="theme-formation-form" required>
+                    <div style="margin-bottom: 20px;">
+                        <input type="radio" required id="ged" name="theme-formation" value="La GED (Gestion Électronique des Documents)" style="display: none;" />
+                        <label for="ged" style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <span class="radio-circle" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #A31E21; margin-right: 10px;"></span>
+                            La GED (Gestion Électronique des Documents)
+                        </label>
+                    </div>
+            
+                    <div style="margin-bottom: 20px;">
+                        <input type="radio" id="iso" name="theme-formation" value="ISO 27001" style="display: none;" />
+                        <label for="iso" style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <span class="radio-circle" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #A31E21; margin-right: 10px;"></span>
+                            ISO 27001
+                        </label>
+                    </div>
+            
+                    <div style="margin-bottom: 20px;">
+                        <input type="radio" id="transformation-digitale" name="theme-formation" value="La transformation digitale" style="display: none;" />
+                        <label for="transformation-digitale" style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <span class="radio-circle" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #A31E21; margin-right: 10px;"></span>
+                            La transformation digitale
+                        </label>
+                    </div>
+            
+                    <div style="margin-bottom: 20px;">
+                        <input type="radio" id="pca-pra" name="theme-formation" value="PCA ET PRA" style="display: none;" />
+                        <label for="pca-pra" style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <span class="radio-circle" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #A31E21; margin-right: 10px;"></span>
+                            PCA ET PRA
+                        </label>
+                    </div>
+            
+                    <div style="margin-bottom: 20px;">
+                        <input type="radio" id="cybersecurite" name="theme-formation" value="Cybersécurité pratique pour les PME" style="display: none;" />
+                        <label for="cybersecurite" style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <span class="radio-circle" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #A31E21; margin-right: 10px;"></span>
+                            Cybersécurité pratique pour les PME
+                        </label>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <input type="radio" id="Management de Projet " name="theme-formation" value="Management de Projet " style="display: none;" />
+                        <label for="Management de Projet " style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <span class="radio-circle" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #A31E21; margin-right: 10px;"></span>
+                            Management de Projet 
+                        </label>
+                    </div>
+            
+                    <div style="margin-bottom: 20px; display: flex; align-items: center;">
+                        <input type="radio" id="theme-autre" name="theme-formation" value="Autre" style="display: none;" />
+                        <label for="theme-autre" style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <span class="radio-circle" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #A31E21; margin-right: 10px;"></span>
+                            Autre
+                        </label>
+                        <input type="text" id="theme-other-input" name="theme_other_input" placeholder="Précisez"
+                            style="display: none; margin-left: 10px; width: 50%; border: none; border-bottom: 1px solid #ccc; outline: none; padding: 5px; font-size: 16px;">
+                    </div>
+                </form>
+            </div>
+
+            <div class="section-content" style="padding: 20px;">
+                <!-- Question pour la sélection de la date -->
+                <p style="margin-bottom: 30px; font-weight: bold;">Date <span style="color: red;">*</span></p>
+            
+                <!-- Input de type date avec restrictions -->
+                <input type="date" required id="date-picker" style="padding: 5px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+
+        </div>
+        <div id="section-3" class="form-section">
+            <div class="section-content" style=" height: 22vh; overflow: hidden;">
+                <img src="https://www.empsi-consulting.com/medias/empsi-consulting-icon-rouge-text-noir.png" alt="" style="width: 100%; height: 100%; object-fit: cover; object-position: 0px -75px;">
+            </div>
+            
+            <div class="section-content" style="height: 20vh; background: linear-gradient(to bottom, #A31E21 5%, #f8f8f8 5%);">
+                <!-- Contenu principal -->
+                <div class="content" style="padding: 20px 10px 10px 10px;">
+                    <h2>Formulaire d'inscription à une formation</h2>
+                    
+                    <!-- Trait de séparation -->
+                    <hr style="border: 1px solid #ccc; margin: 20px 0;">
+                    
+                    <!-- Information en bas -->
+                    <p style="color: red;">* Indique une question obligatoire</p>
+                </div>
+            </div>
+
+
+            <div class="section-content" style="padding: 20px; background: linear-gradient(to bottom, #A31E21 22%, white 22%);">
+                <!-- Partie haute colorée en rouge avec titre centré -->
+                <div style="height: 20%; background-color: #A31E21; display: flex; justify-content: center; align-items: center;">
+                    <h2 style="color: white; margin: 0;">Attentes spécifiques</h2>
+                </div>
+            
+                <!-- Question à choix multiple -->
+                <p style="margin-top: 30px; font-weight: bold; background-color: white;">Cette section vous est dédié. Si vous avez des besoins particuliers ou des attentes, n'hésitez pas.</p>
+
+                <p style="margin-top: 50px;"><textarea id="attentes" name="attentes" placeholder="Votre réponse"
+                    style="border: none; border-bottom: 1px solid #ccc; outline: none; width: 60%; padding: 5px 0; font-size: 16px; resize: none; overflow: hidden; height: 24px;"></textarea>
+                </p>
+         
+            
+                
+            </div>
+
+        </div>
+        <div id="section-4" class="form-section">
+            <div class="section-content" style=" height: 22vh; overflow: hidden;">
+                <img src="https://www.empsi-consulting.com/medias/empsi-consulting-icon-rouge-text-noir.png" alt="" style="width: 100%; height: 100%; object-fit: cover; object-position: 0px -75px;">
+            </div>
+            
+            <div class="section-content" style="height: 20vh; background: linear-gradient(to bottom, #A31E21 5%, #f8f8f8 5%);">
+                <!-- Contenu principal -->
+                <div class="content" style="padding: 20px 10px 10px 10px;">
+                    <h2>Formulaire d'inscription à une formation</h2>
+                    
+                    <!-- Trait de séparation -->
+                    <hr style="border: 1px solid #ccc; margin: 20px 0;">
+                    
+                    <!-- Information en bas -->
+                    <p style="color: red;">* Indique une question obligatoire</p>
+                </div>
+            </div>
+
+            <div class="section-content" style="padding: 20px; background: linear-gradient(to bottom, #A31E21 22%, white 22%);">
+                <!-- Partie haute colorée en rouge avec titre centré -->
+                <div style="height: 20%; background-color: #A31E21; display: flex; justify-content: center; align-items: center;">
+                    <h2 style="color: white; margin: 0;">Validation</h2>
+                </div>
+            
+                <!-- Validation des conditions générales -->
+                <p style="margin-top: 30px; font-weight: bold; background-color: white;">
+                    Acceptez-vous nos conditions générales ? <span style="color: red;">*</span>
+                </p>
+            
+                <!-- Choix multiples avec boutons radio et cercle -->
+                <form id="conditions-form" style="background-color: white;">
+                    <div style="margin-bottom: 20px;">
+                        <input type="radio" id="oui-conditions" name="conditions" value="OUI" style="display: none;" required/>
+                        <label for="oui-conditions" style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <span class="radio-circle" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #A31E21; margin-right: 10px;"></span>
+                            OUI
+                        </label>
+                    </div>
+            
+                    <div style="margin-bottom: 20px;">
+                        <input type="radio" id="non-conditions" name="conditions" value="Non" style="display: none;" />
+                        <label for="non-conditions" style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <span class="radio-circle" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #A31E21; margin-right: 10px;"></span>
+                            NON
+                        </label>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="section-content" style="padding: 20px;">
+                <!-- Consentement pour recevoir des informations supplémentaires -->
+                <p style="margin-bottom: 30px; font-weight: bold;">
+                    Acceptez-vous de recevoir des informations sur d'autres formations ? <span style="color: red;">*</span>
+                </p>
+            
+                <!-- Choix multiples avec boutons radio et cercle -->
+                <form id="informations-form">
+                    <div style="margin-bottom: 20px;">
+                        <input type="radio" id="oui-informations" name="informations" value="OUI" style="display: none;" required/>
+                        <label for="oui-informations" style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <span class="radio-circle" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #A31E21; margin-right: 10px;"></span>
+                            OUI
+                        </label>
+                    </div>
+            
+                    <div style="margin-bottom: 20px;">
+                        <input type="radio" id="non-informations" name="informations" value="Non" style="display: none;" />
+                        <label for="non-informations" style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <span class="radio-circle" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #A31E21; margin-right: 10px;"></span>
+                            NON
+                        </label>
+                    </div>
+                </form>
+            </div>
+            
+
+
+        </div>
+        <div id="section-5" class="form-section">
+            <div class="section-content" style=" height: 22vh; overflow: hidden;">
+                <img src="https://www.empsi-consulting.com/medias/empsi-consulting-icon-rouge-text-noir.png" alt="" style="width: 100%; height: 100%; object-fit: cover; object-position: 0px -75px;">
+            </div>
+            
+            <div class="section-content" style="height: 30vh; background: linear-gradient(to bottom, #A31E21 5%, #f8f8f8 5%);">
+                <!-- Contenu principal -->
+                <div class="content" style="padding: 20px 10px 10px 10px;">
+                    <h2>Formulaire d'inscription à une formation</h2>
+                    <p>Merci pour votre inscription !</p>
+                    
+                    <!-- Trait de séparation -->
+                    <hr style="border: 1px solid #ccc; margin: 20px 0;">
+                    
+                </div>
+            </div>
+        </div>
+        
+
+        <div id="confirmation-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 1000;">
+            <div style="background: white; padding: 20px; border-radius: 8px; text-align: center; max-width: 400px; width: 80%;">
+                <p>Êtes-vous sûr de vouloir effacer le formulaire ?</p>
+                <button onclick="confirmClear(true)" style="margin: 5px; padding: 10px 20px; background-color: #A31E21; color: white; border: none; border-radius: 5px;">Oui</button>
+                <button onclick="confirmClear(false)" style="margin: 5px; padding: 10px 20px; background-color: #aaa; color: white; border: none; border-radius: 5px;">Non</button>
+            </div>
+        </div>
+        
+
+        <!-- Navigation Buttons -->
+        <div class="navigation-buttons">
+            <div class="left-buttons">
+                <button type="button" onclick="navigateSection(-1)" style="visibility: hidden;">Précédent</button>
+                <button type="button" onclick="navigateSection(1)">Suivant</button>
+            </div>
+            <button onclick="clearForm()" id="clear-btn">Effacer</button>
+
+        </div>
+    </div>
+
+    <script>
+
+        let currentSection = 1;
+        const totalSections = 5;
+
+        // Valide les champs dans une section
+function validateSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    const inputs = section.querySelectorAll("input, textarea, select");
+    let valid = true;
+
+    inputs.forEach((input) => {
+        // Supprime les messages d'erreur existants
+        const error = input.nextElementSibling;
+        if (error && error.classList.contains("error-message")) {
+            error.remove();
+        }
+
+        // Validation des champs requis
+        if (input.required && !input.value.trim()) {
+            valid = false;
+            showError(input, "Ce champ est obligatoire");
+        
+        }else if (input.required && input.type === "radio") {
+            // Validation des groupes de boutons radio
+            const group = section.querySelectorAll(`input[name="${input.name}"]`);
+            const isChecked = Array.from(group).some((radio) => radio.checked);
+
+            if (!isChecked) {
+                valid = false;
+                showError(group[group.length - 1], "Veuillez sélectionner une option");
+            }
+        } else if (input.type === "email" && !/^\S+@\S+\.\S+$/.test(input.value)) {
+            valid = false;
+            showError(input, "Veuillez entrer un email valide");
+        } else if (input.type === "tel" && !/^\d+$/.test(input.value)) {
+            valid = false;
+            showError(input, "Le numéro de téléphone doit contenir uniquement des chiffres");
+        }
+    });
+
+    return valid;
+}
+
+// Affiche un message d'erreur sous un champ
+function showError(input, message) {
+    const error = document.createElement("div");
+    error.classList.add("error-message");
+    error.style.color = "red";
+    error.style.fontSize = "12px";
+    error.style.marginTop = "5px";
+    error.textContent = message;
+
+    // Ajouter le message d'erreur
+    input.closest("div").appendChild(error);
+
+    // Scroller jusqu'à l'élément invalide
+    input.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+
+// Navigation entre les sections avec validation
+function navigateSection(direction) {
+    const currentSectionId = `section-${currentSection}`;
+    const valid = direction === 1 ? validateSection(currentSectionId) : true;
+
+    if (valid) {
+        document.getElementById(currentSectionId).classList.remove("active");
+        currentSection += direction;
+        document.getElementById(`section-${currentSection}`).classList.add("active");
+
+        const prevButton = document.querySelector('.navigation-buttons button:first-child');
+        const nextButton = document.querySelector('.navigation-buttons button:nth-child(2)');
+
+        if (currentSection === 5 && direction === 1) {
+            collectResponses(); // Collecte des réponses ici
+}
+
+
+        if (currentSection === 1) {
+            prevButton.style.visibility = 'hidden';
+            nextButton.textContent = 'Suivant';
+        } else if (currentSection === 4) {
+            nextButton.textContent = 'Envoyer';
+            prevButton.style.visibility = 'visible';
+        } else if (currentSection === 5) {
+            nextButton.style.visibility = 'hidden';
+            prevButton.style.visibility = 'hidden';
+        } else {
+            nextButton.textContent = 'Suivant';
+            prevButton.style.visibility = 'visible';
+        }
+    }
+}
+
+// Confirmation pour le bouton Effacer
+function clearForm() {
+    const modal = document.getElementById("confirmation-modal");
+    modal.style.display = "flex";
+}
+
+function confirmClear(isConfirmed) {
+    const modal = document.getElementById("confirmation-modal");
+    modal.style.display = "none";
+
+    if (isConfirmed) {
+        const form = document.querySelector(".form-container");
+        const inputs = form.querySelectorAll("input, textarea, select");
+
+        // Réinitialiser tous les champs du formulaire
+        inputs.forEach((input) => {
+            input.value = "";
+            input.style.borderColor = "";
+            const error = input.nextElementSibling;
+            if (error && error.classList.contains("error-message")) {
+                error.remove();
+            }
+        });
+
+        // Retourner à la section 1
+        document.getElementById(`section-${currentSection}`).classList.remove("active");
+        currentSection = 1; // Réinitialiser la section actuelle
+        document.getElementById(`section-${currentSection}`).classList.add("active");
+
+        // Réinitialiser les boutons de navigation
+        const prevButton = document.querySelector('.navigation-buttons button:first-child');
+        const nextButton = document.querySelector('.navigation-buttons button:nth-child(2)');
+        prevButton.style.visibility = 'hidden';
+        nextButton.style.visibility = 'visible';
+        nextButton.textContent = 'Suivant';
+    }
+}
+
+
+
+function collectResponses() {
+    console.log("Dates sélectionnées :", picker.selectedDates);
+    const form = document.querySelector(".form-container");
+    const inputs = form.querySelectorAll("input, textarea, select");
+    const responses = {};
+    responses["dates"] = picker.selectedDates
+
+    inputs.forEach((input) => {
+        if (input.name) {
+            if (input.type === "radio" || input.type === "checkbox") {
+                if (input.checked) {
+                    responses[input.name] = input.value;
+                }
+            }
+            else if (input.classList.contains("date-picker")) {
+                responses[input.name] = picker.selectedDates.map(date => date.toISOString().split('T')[0]).join(', ') || "Non renseigné";
+            }
+            else {
+                responses[input.name] = input.value || "Non renseigné";
+            }
+        }
+    });
+
+    console.log("Réponses des utilisateurs :", responses);
+}
+
+
+
+
+// Gestion des boutons radio avec les cercles pour chaque formulaire
+document.querySelectorAll('form').forEach(form => {
+    const radios = form.querySelectorAll('input[type="radio"]');
+    radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            // Réinitialise les cercles pour tous les boutons radio du formulaire
+            form.querySelectorAll('.radio-circle').forEach(circle => {
+                circle.style.backgroundColor = 'transparent';
+            });
+
+            // Active le cercle correspondant au bouton radio sélectionné
+            const selectedCircle = radio.nextElementSibling.querySelector('.radio-circle');
+            if (selectedCircle) selectedCircle.style.backgroundColor = '#A31E21';
+
+            // Gestion des champs texte pour "Autre"
+            if (radio.id === 'other' || radio.id === 'theme-autre') {
+                const relatedInput = form.querySelector(`#${radio.id === 'other' ? 'other-input' : 'theme-other-input'}`);
+                relatedInput.style.display = 'block';
+            } else {
+                form.querySelectorAll('input[type="text"]').forEach(input => {
+                    input.style.display = 'none';
+                });
+            }
+        });
+    });
+});
+
+
+// Liste des dates autorisées par type de formation
+const availableDates = {
+    "Webinaire": ["2024-12-04", "2024-12-05", "2024-12-06"],
+    "Séminaire": ["2024-12-19", "2024-12-20", "2024-12-21"],
+    "Masterclass": ["2024-12-12", "2024-12-13", "2024-12-16"],
+    "Accompagnement personnalisé": ["2024-12-17", "2024-12-18"],
+    "Autre": ["2024-12-19", "2024-12-20"]
+};
+
+// Nombre de dates à sélectionner par type de formation
+const maxDatesPerType = {
+    "Webinaire": 1,
+    "Séminaire": 2,
+    "Masterclass": 1,
+    "Accompagnement personnalisé": 1,
+    "Autre": 1
+};
+
+// Référence à l'élément de la question de sélection de la formation
+const typeFormationForm = document.getElementById('type-formation-form');
+const datePicker = document.getElementById('date-picker');
+
+// Initialisation de flatpickr
+const picker = flatpickr(datePicker, {
+    dateFormat: "Y-m-d",
+    minDate: "today",  // Pour limiter la sélection aux dates futures uniquement
+    mode: "multiple",  // Permet la sélection de plusieurs dates
+    disable: [
+        function(date) {
+            // Désactive toutes les dates par défaut
+            return true;
+        }
+    ],
+    // Ajout d'un événement pour limiter le nombre de dates sélectionnables
+    onValueUpdate: function(selectedDates, dateStr, instance) {
+        const selectedType = typeFormationForm.querySelector('input[name="type-formation"]:checked').value;
+        const maxDates = maxDatesPerType[selectedType];
+        
+        if (selectedDates.length > maxDates) {
+            // Supprimer les dates supplémentaires
+            instance.clear();
+            instance.setDate(selectedDates.slice(0, maxDates));
+            // Afficher un message d'alerte
+            alert(`Vous ne pouvez sélectionner que ${maxDates} date(s) pour ce type de formation.`);
+        }
+
+        if (selectedDates.length < maxDates && document.getElementById('date-picker').value && document.getElementById('date-picker').value.includes(',')) {
+            // Afficher un message d'alerte
+            alert(`Vous ne pouvez sélectionner que ${maxDates} date(s) pour ce type de formation.`);
+        }
+    }
+});
+
+// Écouter les changements de sélection dans le formulaire
+typeFormationForm.addEventListener('change', () => {
+    const selectedType = typeFormationForm.querySelector('input[name="type-formation"]:checked');
+
+    if (selectedType) {
+        const type = selectedType.value;
+        const dates = availableDates[type] || [];
+
+        // Réinitialiser les dates désactivées et activer uniquement les dates du type de formation
+        picker.set('disable', [
+            function(date) {
+                // Convertir la date en format "YYYY-MM-DD"
+                return !dates.includes(date.toISOString().split('T')[0]);
+            }
+        ]);
+
+        // Réinitialiser la valeur du datepicker
+        picker.clear();
+    }
+});
+
+
+
+    </script>
+</body>
+</html>

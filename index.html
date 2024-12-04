@@ -583,6 +583,33 @@
         </div>
     </div>
 
+        <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCXVK7CPQ7Fwug-zabRnRyy6Fehn9Jd2NE",
+    authDomain: "formulaire-empsi.firebaseapp.com",
+    projectId: "formulaire-empsi",
+    storageBucket: "formulaire-empsi.firebasestorage.app",
+    messagingSenderId: "971121686068",
+    appId: "1:971121686068:web:e95610cefecc4d18bd3c61",
+    measurementId: "G-TRC03XRF33"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getFirestore(app);
+</script>
+
+
     <script>
 
         let currentSection = 1;
@@ -658,7 +685,27 @@ function navigateSection(direction) {
         const nextButton = document.querySelector('.navigation-buttons button:nth-child(2)');
 
         if (currentSection === 5 && direction === 1) {
-            collectResponses(); // Collecte des réponses ici
+            collectResponses(); // Votre fonction actuelle
+    
+            // Ajoutez cette partie pour envoyer à Firebase
+            async function sendToFirebase() {
+                try {
+                    // Utiliser votre objet 'responses' de collectResponses
+                    const docRef = await addDoc(collection(db, "form-submissions"), {
+                        ...responses,  // Vos données déjà collectées
+                        submissionDate: new Date().toISOString()
+                    });
+                    
+                    console.log("Document envoyé avec l'ID: ", docRef.id);
+                    alert("Formulaire soumis avec succès !");
+                } catch (error) {
+                    console.error("Erreur lors de l'envoi: ", error);
+                    alert("Erreur lors de la soumission du formulaire");
+                }
+            }
+        
+            // Appelez la fonction d'envoi
+            sendToFirebase();
 }
 
 
@@ -718,13 +765,16 @@ function confirmClear(isConfirmed) {
 
 
 
-function collectResponses() {
+async function collectResponses() {
     console.log("Dates sélectionnées :", picker.selectedDates);
     const form = document.querySelector(".form-container");
     const inputs = form.querySelectorAll("input, textarea, select");
     const responses = {};
-    responses["dates"] = picker.selectedDates
-
+    
+    // Traitement des dates
+    responses["dates"] = picker.selectedDates.map(date => date.toISOString().split('T')[0]).join(', ') || "Non renseigné";
+    
+    // Traitement des inputs
     inputs.forEach((input) => {
         if (input.name) {
             if (input.type === "radio" || input.type === "checkbox") {
@@ -741,7 +791,32 @@ function collectResponses() {
         }
     });
 
-    console.log("Réponses des utilisateurs :", responses);
+    // Nettoyage des données
+    // Gérer les champs "Autre"
+    if (responses['type-formation'] === 'Autre' && responses['other_input'] !== "Non renseigné") {
+        responses['type-formation'] = responses['other_input'];
+    }
+    if (responses['theme-formation'] === 'Autre' && responses['theme_other_input'] !== "Non renseigné") {
+        responses['theme-formation'] = responses['theme_other_input'];
+    }
+
+    // Supprimer les clés inutiles
+    delete responses['other_input'];
+    delete responses['theme_other_input'];
+
+    try {
+        // Envoyer à Firestore
+        const docRef = await addDoc(collection(db, "form-submissions"), {
+            ...responses,
+            submissionDate: new Date().toISOString()
+        });
+        
+        console.log("Document written with ID: ", docRef.id);
+        alert("Formulaire soumis avec succès !");
+    } catch (error) {
+        console.error("Error adding document: ", error);
+        alert("Erreur lors de la soumission du formulaire");
+    }
 }
 
 
@@ -852,29 +927,6 @@ typeFormationForm.addEventListener('change', () => {
 
 
     </script>
-    <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyCXVK7CPQ7Fwug-zabRnRyy6Fehn9Jd2NE",
-    authDomain: "formulaire-empsi.firebaseapp.com",
-    projectId: "formulaire-empsi",
-    storageBucket: "formulaire-empsi.firebasestorage.app",
-    messagingSenderId: "971121686068",
-    appId: "1:971121686068:web:e95610cefecc4d18bd3c61",
-    measurementId: "G-TRC03XRF33"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
     
 </body>
 </html>

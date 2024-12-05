@@ -185,10 +185,9 @@ async function collectResponses() {
         });
 
         console.log("Document écrit avec ID :", docRef.id);
-        alert("Formulaire soumis avec succès !");
     } catch (error) {
         console.error("Erreur lors de l'ajout du document :", error);
-        alert("Erreur lors de la soumission du formulaire.");
+        alert("Erreur lors de la soumission du formulaire. Veuillez réessayer plus tard");
     }
 }
 
